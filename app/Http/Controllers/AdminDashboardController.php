@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\ContactMessage;
 use App\Models\Review;
 use App\Models\User;
 use Carbon\Carbon;
@@ -74,6 +75,22 @@ class AdminDashboardController extends Controller
                 'date' => $r->created_at->format('j M Y'),
             ]);
 
+        $recentMessages = ContactMessage::latest()
+            ->take(8)
+            ->get()
+            ->map(fn (ContactMessage $m) => [
+                'id' => $m->id,
+                'name' => $m->name,
+                'email' => $m->email,
+                'subject' => $m->subject,
+                'message' => $m->message,
+                'is_read' => $m->is_read,
+                'date_label' => $m->created_at->format('j M Y, g:i A'),
+                'initials' => collect(explode(' ', $m->name))->slice(0, 2)->map(fn ($w) => strtoupper(mb_substr($w, 0, 1)))->join(''),
+            ]);
+
+        $unreadMessages = ContactMessage::where('is_read', false)->count();
+
         $doctor = User::where('role', 'doctor')->first();
 
         return Inertia::render('Admin/Dashboard', [
@@ -84,12 +101,15 @@ class AdminDashboardController extends Controller
                 'revenue' => $totalRevenue,
                 'month_revenue' => $monthRevenue,
                 'pending_payments' => Appointment::where('payment_status', 'pending')->where('status', '!=', 'cancelled')->sum('amount'),
+                'messages' => ContactMessage::count(),
+                'unread_messages' => $unreadMessages,
             ],
             'statusCounts' => $statusCounts,
             'trend' => $trend,
             'recentAppointments' => $recentAppointments,
             'recentUsers' => $recentUsers,
             'recentReviews' => $recentReviews,
+            'recentMessages' => $recentMessages,
             'doctor' => $doctor ? [
                 'name' => $doctor->name,
                 'specialization' => $doctor->specialization,
