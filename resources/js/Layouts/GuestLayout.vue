@@ -23,7 +23,7 @@ const page = usePage();
 
             <div class="relative max-w-md">
                 <div class="mx-auto -mb-4 w-64 opacity-90">
-                    <img src="DOCTOR_IMAGE_URL" alt="Dr. Awais Malik" class="h-auto w-full" />
+                    <img src="/assets/awais.webp" alt="Dr. Awais Malik" class="aspect-[4/5] w-full rounded-[10px] object-cover object-top" />
                 </div>
                 <div class="relative z-10">
                     <h2 class="text-balance text-2xl font-extrabold leading-snug text-white">

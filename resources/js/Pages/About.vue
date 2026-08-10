@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/vue3';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import Button from '@/Components/ui/Button.vue';
 import SectionHeading from '@/Components/ui/SectionHeading.vue';
+import site from '@/config/site.js';
 import {
     ShieldCheckIcon,
     StarIcon,
@@ -14,9 +15,7 @@ import {
     ArrowRightIcon,
 } from '@heroicons/vue/24/outline';
 
-defineProps({
-    doctor: { type: Object, default: null },
-});
+const doctor = site.doctor;
 
 const values = [
     { icon: HeartIcon, title: 'Patient-first care', text: 'Every decision starts with what is best for you — not what is most convenient.' },
@@ -27,7 +26,7 @@ const values = [
 </script>
 
 <template>
-    <PublicLayout :doctor="doctor">
+    <PublicLayout>
         <Head title="About" />
 
         <!-- Page hero -->
@@ -53,7 +52,7 @@ const values = [
             <div class="container-px grid items-center gap-12 lg:grid-cols-2">
                 <div class="relative mx-auto w-full max-w-md lg:max-w-none">
                     <div class="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50 p-2 shadow-lifted">
-                        <img src="DOCTOR_IMAGE_URL" alt="Portrait of Dr. Awais Malik" class="h-auto w-full" />
+                        <img src="/assets/awais.webp" alt="Portrait of Dr. Awais Malik" class="aspect-[4/5] w-full rounded-[10px] object-cover object-top" />
                     </div>
                     <div class="absolute -bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-4 py-2 shadow-lifted ring-1 ring-slate-100">
                         <StarIcon class="h-4 w-4 text-amber-400" />
@@ -64,7 +63,7 @@ const values = [
                 <div>
                     <SectionHeading
                         eyebrow="Meet your doctor"
-                        title="{{ doctor?.name }}"
+                        :title="doctor?.name"
                     />
                     <p class="mt-2 text-lg font-medium text-primary-700">{{ doctor?.specialization }}</p>
                     <div class="mt-5 space-y-4 leading-relaxed text-slate-600">
@@ -125,7 +124,7 @@ const values = [
                         <p class="mt-1 text-sm font-medium text-slate-500">Years in practice</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-4xl font-extrabold text-primary-700">8k<span>+</span></p>
+                        <p class="text-4xl font-extrabold text-primary-700">{{ doctor?.patients_count ?? '8k+' }}</p>
                         <p class="mt-1 text-sm font-medium text-slate-500">Patients treated</p>
                     </div>
                     <div class="text-center">
@@ -133,7 +132,7 @@ const values = [
                         <p class="mt-1 text-sm font-medium text-slate-500">Average rating</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-4xl font-extrabold text-primary-700">97<span>%</span></p>
+                        <p class="text-4xl font-extrabold text-primary-700">{{ doctor?.satisfaction ?? 97 }}<span>%</span></p>
                         <p class="mt-1 text-sm font-medium text-slate-500">Patient satisfaction</p>
                     </div>
                 </div>
