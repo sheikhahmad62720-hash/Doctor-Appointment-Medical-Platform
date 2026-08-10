@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import Brand from '@/Components/ui/Brand.vue';
+import site from '@/config/site.js';
 import {
     ChevronDownIcon,
     PhoneIcon,
@@ -14,12 +15,9 @@ import {
     ArrowRightIcon,
 } from '@heroicons/vue/24/outline';
 
-defineProps({
-    doctor: { type: Object, default: null },
-});
-
 const page = usePage();
 const user = () => page.props.auth?.user ?? null;
+const doctor = site.doctor;
 
 const showingMobile = ref(false);
 
@@ -242,7 +240,7 @@ const navHref = (name) => {
                         <div class="mt-5 flex items-center gap-2">
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-100">
                                 <StarIcon class="h-3.5 w-3.5" />
-                                {{ doctor?.rating ?? 4.9 }} patient rating
+                                {{ doctor.rating }} patient rating
                             </span>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DoctorDashboardController;
 use App\Http\Controllers\PatientDashboardController;
 use App\Http\Controllers\ProfileController;
@@ -12,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/services', [PublicController::class, 'services'])->name('services');
+Route::get('/services/{slug}', [PublicController::class, 'serviceDetail'])->name('services.show');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/book', [BookingController::class, 'create'])->name('booking.create');
@@ -35,6 +38,7 @@ Route::middleware(['auth', EnsureUserRole::class.':doctor'])->group(function () 
 
 Route::middleware(['auth', EnsureUserRole::class.':admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/messages/{contactMessage}/toggle', [ContactController::class, 'toggleRead'])->name('admin.messages.toggle');
 });
 
 require __DIR__.'/auth.php';

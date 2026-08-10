@@ -173,7 +173,7 @@ const formatExpiry = (e) => {
 </script>
 
 <template>
-    <PublicLayout :doctor="doctor">
+    <PublicLayout>
         <Head title="Book an Appointment" />
 
         <section class="relative overflow-hidden bg-navy-950 py-14 text-center sm:py-16">

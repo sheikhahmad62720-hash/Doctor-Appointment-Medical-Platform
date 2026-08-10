@@ -5,6 +5,7 @@ import Button from '@/Components/ui/Button.vue';
 import Badge from '@/Components/ui/Badge.vue';
 import ServiceCard from '@/Components/ui/ServiceCard.vue';
 import SectionHeading from '@/Components/ui/SectionHeading.vue';
+import site from '@/config/site.js';
 import {
     ShieldCheckIcon,
     StarIcon,
@@ -20,17 +21,13 @@ import {
     PhoneIcon,
 } from '@heroicons/vue/24/outline';
 
-defineProps({
-    doctor: { type: Object, default: null },
-    services: { type: Array, default: () => [] },
-    reviews: { type: Array, default: () => [] },
-});
+const { doctor, services, reviews } = site;
 
 const goBook = () => router.visit(route('booking.create'));
 </script>
 
 <template>
-    <PublicLayout :doctor="doctor">
+    <PublicLayout>
         <Head title="Home" />
 
         <!-- ===================== HERO ===================== -->
@@ -40,7 +37,7 @@ const goBook = () => router.visit(route('booking.create'));
                 <div class="absolute -left-32 top-64 h-[360px] w-[360px] rounded-full bg-navy-100/50 blur-3xl" />
             </div>
 
-            <div class="container-px relative grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+            <div class="container-px relative grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:py-10">
                 <div class="max-w-2xl">
                     <div class="inline-flex items-center gap-2 rounded-full border border-primary-100 bg-white/80 px-3.5 py-1.5 shadow-soft backdrop-blur">
                         <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-white">
@@ -76,7 +73,7 @@ const goBook = () => router.visit(route('booking.create'));
                             <p class="mt-0.5 text-xs font-medium uppercase tracking-wider text-slate-400">Years of experience</p>
                         </div>
                         <div>
-                            <p class="text-2xl font-extrabold text-navy-900">8k<span class="text-primary-600">+</span></p>
+                            <p class="text-2xl font-extrabold text-navy-900">{{ doctor?.patients_count ?? '8k+' }}</p>
                             <p class="mt-0.5 text-xs font-medium uppercase tracking-wider text-slate-400">Happy patients</p>
                         </div>
                         <div>
@@ -92,7 +89,7 @@ const goBook = () => router.visit(route('booking.create'));
                 <!-- Doctor illustration + floating cards -->
                 <div class="relative mx-auto w-full max-w-md lg:max-w-none">
                     <div class="relative">
-                        <img src="DOCTOR_IMAGE_URL" alt="Portrait of Dr. Awais Malik" class="h-auto w-full" />
+                        <img src="/assets/awais.webp" alt="Portrait of Dr. Awais Malik" class="aspect-[4/5] w-full rounded-[10px] object-cover object-top" />
 
                         <!-- Floating: experience badge -->
                         <div class="absolute left-0 top-8 animate-fade-in-up rounded-2xl border border-slate-100 bg-white/95 p-3.5 shadow-lifted backdrop-blur sm:left-4" style="animation-delay: 150ms">
@@ -115,7 +112,7 @@ const goBook = () => router.visit(route('booking.create'));
                                 </div>
                                 <div>
                                     <p class="text-sm font-bold text-navy-900">{{ doctor?.rating }}</p>
-                                    <p class="text-xs text-slate-400">2,340 reviews</p>
+                                    <p class="text-xs text-slate-400">{{ doctor?.reviews_count ?? '2,340' }} reviews</p>
                                 </div>
                             </div>
                         </div>
@@ -192,7 +189,7 @@ const goBook = () => router.visit(route('booking.create'));
                     <div class="relative mx-auto w-full max-w-md lg:max-w-none">
                         <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-2">
                             <div class="overflow-hidden rounded-2xl bg-gradient-to-br from-primary-900/60 to-navy-900">
-                                <img src="DOCTOR_IMAGE_URL" alt="Portrait of Dr. Awais Malik" class="h-auto w-full" />
+                                <img src="/assets/awais.webp" alt="Portrait of Dr. Awais Malik" class="aspect-[4/5] w-full rounded-[10px] object-cover object-top" />
                             </div>
                             <div class="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow-lifted">
                                 <ShieldCheckIcon class="h-4 w-4 text-primary-600" />
