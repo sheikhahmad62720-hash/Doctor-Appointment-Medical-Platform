@@ -4,16 +4,14 @@ import PublicLayout from '@/Layouts/PublicLayout.vue';
 import ServiceCard from '@/Components/ui/ServiceCard.vue';
 import SectionHeading from '@/Components/ui/SectionHeading.vue';
 import Button from '@/Components/ui/Button.vue';
+import site from '@/config/site.js';
 import { ArrowRightIcon, VideoCameraIcon, BuildingOfficeIcon } from '@heroicons/vue/24/outline';
 
-defineProps({
-    services: { type: Array, default: () => [] },
-    doctor: { type: Object, default: null },
-});
+const { services, doctor } = site;
 </script>
 
 <template>
-    <PublicLayout :doctor="doctor">
+    <PublicLayout>
         <Head title="Services" />
 
         <section class="relative overflow-hidden bg-navy-950 py-20 text-center">

@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import Button from '@/Components/ui/Button.vue';
 import Input from '@/Components/ui/Input.vue';
@@ -7,51 +8,67 @@ import Label from '@/Components/ui/Label.vue';
 import Textarea from '@/Components/ui/Textarea.vue';
 import FieldError from '@/Components/ui/FieldError.vue';
 import { toast } from '@/lib/toast';
+import site from '@/config/site.js';
 import { MapPinIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline';
 
-defineProps({
-    doctor: { type: Object, default: null },
-});
+const doctor = site.doctor;
 
-const form = reactive({
+const clinicCards = doctor.clinics.map((clinic) => ({
+    icon: MapPinIcon,
+    title: `${clinic.name} · ${clinic.area}, ${clinic.city}`,
+    subtitle: `${clinic.timing} clinic`,
+    lines: [clinic.address],
+}));
+
+const contactCards = [
+    ...clinicCards,
+    { icon: PhoneIcon, title: 'Call us', lines: [doctor.phone, 'For appointments & queries'] },
+    { icon: EnvelopeIcon, title: 'Email us', lines: [doctor.email, 'Replies within 24 hours'] },
+];
+
+const form = useForm({
     name: '',
     email: '',
     subject: '',
     message: '',
 });
 
-const errors = reactive({});
+const localErrors = reactive({});
 const sending = ref(false);
 
 const validate = () => {
-    Object.keys(errors).forEach((k) => delete errors[k]);
-    if (!form.name.trim()) errors.name = 'Please enter your name.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errors.email = 'Please enter a valid email address.';
-    if (!form.subject.trim()) errors.subject = 'Please add a short subject.';
-    if (form.message.trim().length < 10) errors.message = 'Please write a message of at least 10 characters.';
-    return Object.keys(errors).length === 0;
+    Object.keys(localErrors).forEach((k) => delete localErrors[k]);
+    if (!form.name.trim()) localErrors.name = 'Please enter your name.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) localErrors.email = 'Please enter a valid email address.';
+    if (!form.subject.trim()) localErrors.subject = 'Please add a short subject.';
+    if (form.message.trim().length < 10) localErrors.message = 'Please write a message of at least 10 characters.';
+    return Object.keys(localErrors).length === 0;
 };
+
+const errorFor = (field) => localErrors[field] || form.errors[field];
 
 const submit = () => {
     if (!validate()) return;
     sending.value = true;
-    setTimeout(() => {
-        sending.value = false;
-        toast('Your message has been sent. We will reply within one business day.', 'success', 'Message sent');
-        Object.assign(form, { name: '', email: '', subject: '', message: '' });
-    }, 900);
+    form.post(route('contact.store'), {
+        preserveScroll: true,
+        onFinish: () => {
+            sending.value = false;
+        },
+        onSuccess: () => {
+            toast('Your message has been sent. We will reply within one business day.', 'success', 'Message sent');
+            form.reset();
+        },
+        onError: () => {
+            toast('Please check the highlighted fields and try again.', 'error', 'Could not send message');
+        },
+    });
 };
 
-const contactCards = [
-    { icon: MapPinIcon, title: 'FMH · Shadman, Lahore', subtitle: 'Morning clinic', lines: ['Fatima Memorial Hospital', 'Shadman, Lahore'] },
-    { icon: MapPinIcon, title: 'Mid City Hospital · Jail Road', subtitle: 'Evening clinic', lines: ['Jail Road, Lahore'] },
-    { icon: PhoneIcon, title: 'Call us', lines: ['+92 300 1234567', 'For appointments & queries'] },
-    { icon: EnvelopeIcon, title: 'Email us', lines: ['care@medicare.test', 'Replies within 24 hours'] },
-];
 </script>
 
 <template>
-    <PublicLayout :doctor="doctor">
+    <PublicLayout>
         <Head title="Contact" />
 
         <section class="relative overflow-hidden bg-navy-950 py-20 text-center">
@@ -102,26 +119,26 @@ const contactCards = [
                         <div class="grid gap-5 sm:grid-cols-2">
                             <div>
                                 <Label for="c-name" value="Full name" required />
-                                <Input id="c-name" v-model="form.name" placeholder="Jane Smith" :error="!!errors.name" autocomplete="name" />
-                                <FieldError :message="errors.name" />
+                                <Input id="c-name" v-model="form.name" placeholder="Jane Smith" :error="!!errorFor('name')" autocomplete="name" />
+                                <FieldError :message="errorFor('name')" />
                             </div>
                             <div>
                                 <Label for="c-email" value="Email address" required />
-                                <Input id="c-email" type="email" v-model="form.email" placeholder="jane@example.com" :error="!!errors.email" autocomplete="email" />
-                                <FieldError :message="errors.email" />
+                                <Input id="c-email" type="email" v-model="form.email" placeholder="jane@example.com" :error="!!errorFor('email')" autocomplete="email" />
+                                <FieldError :message="errorFor('email')" />
                             </div>
                         </div>
 
                         <div>
                             <Label for="c-subject" value="Subject" required />
-                            <Input id="c-subject" v-model="form.subject" placeholder="What is your message about?" :error="!!errors.subject" />
-                            <FieldError :message="errors.subject" />
+                            <Input id="c-subject" v-model="form.subject" placeholder="What is your message about?" :error="!!errorFor('subject')" />
+                            <FieldError :message="errorFor('subject')" />
                         </div>
 
                         <div>
                             <Label for="c-message" value="Message" required />
-                            <Textarea id="c-message" v-model="form.message" rows="5" placeholder="Tell us how we can help..." :error="!!errors.message" />
-                            <FieldError :message="errors.message" />
+                            <Textarea id="c-message" v-model="form.message" rows="5" placeholder="Tell us how we can help..." :error="!!errorFor('message')" />
+                            <FieldError :message="errorFor('message')" />
                         </div>
 
                         <div class="flex items-center justify-between gap-4">

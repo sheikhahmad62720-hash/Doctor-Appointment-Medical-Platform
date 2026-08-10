@@ -58,7 +58,7 @@ defineProps({
                 <Button variant="secondary" size="sm" full-width>Book now</Button>
             </Link>
             <Link
-                :href="route('services')"
+                :href="route('services.show', service.slug)"
                 class="inline-flex items-center gap-1 text-sm font-semibold text-slate-400 transition hover:text-primary-700"
             >
                 Details

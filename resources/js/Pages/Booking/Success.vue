@@ -46,7 +46,7 @@ const print = () => window.print();
 </script>
 
 <template>
-    <PublicLayout :doctor="doctor">
+    <PublicLayout>
         <Head title="Appointment Confirmed" />
 
         <section class="section-pad">

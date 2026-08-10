@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import StatCard from '@/Components/ui/StatCard.vue';
 import Badge from '@/Components/ui/Badge.vue';
@@ -14,6 +14,9 @@ import {
     HomeIcon,
     UserCircleIcon,
     StarIcon,
+    EnvelopeIcon,
+    CheckIcon,
+    BellIcon,
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
@@ -23,6 +26,7 @@ const props = defineProps({
     recentAppointments: { type: Array, default: () => [] },
     recentUsers: { type: Array, default: () => [] },
     recentReviews: { type: Array, default: () => [] },
+    recentMessages: { type: Array, default: () => [] },
     doctor: { type: Object, default: null },
 });
 
@@ -44,6 +48,21 @@ const appointmentColumns = [
     { key: 'status', label: 'Status' },
     { key: 'amount', label: 'Fee', align: 'right' },
 ];
+
+const messageColumns = [
+    { key: 'sender', label: 'Sender' },
+    { key: 'subject', label: 'Subject' },
+    { key: 'received', label: 'Received' },
+    { key: 'status', label: 'Status' },
+    { key: 'action', label: '', align: 'right' },
+];
+
+const toggleMessage = (message) => {
+    router.post(route('admin.messages.toggle', message.id), {}, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+};
 </script>
 
 <template>
@@ -185,6 +204,58 @@ const appointmentColumns = [
                         <p class="mt-1 text-[11px] text-slate-400">{{ review.date }}</p>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Contact messages -->
+        <div class="mt-10">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <h2 class="text-lg font-bold text-navy-950">Contact messages</h2>
+                    <Badge v-if="stats.unread_messages" tone="amber" dot>{{ stats.unread_messages }} new</Badge>
+                </div>
+                <EnvelopeIcon class="h-5 w-5 text-slate-300" />
+            </div>
+            <div class="mt-4">
+                <DataTable :columns="messageColumns" :rows="recentMessages" empty-title="No messages yet" empty-message="Messages from the contact form will appear here.">
+                    <template #cell-sender="{ row }">
+                        <div class="flex items-center gap-3">
+                            <span class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-50 text-xs font-bold text-primary-700 ring-1 ring-primary-100">
+                                {{ row.initials }}
+                                <span v-if="!row.is_read" class="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-amber-400 ring-2 ring-white" />
+                            </span>
+                            <div class="min-w-0">
+                                <p class="truncate text-sm font-semibold text-navy-900">{{ row.name }}</p>
+                                <p class="truncate text-xs text-slate-400">{{ row.email }}</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template #cell-subject="{ row }">
+                        <div class="min-w-0 max-w-xs">
+                            <p class="truncate text-sm font-semibold" :class="row.is_read ? 'text-slate-600' : 'text-navy-950'">
+                                {{ row.subject }}
+                            </p>
+                            <p class="mt-0.5 line-clamp-1 text-xs text-slate-400">“{{ row.message }}”</p>
+                        </div>
+                    </template>
+                    <template #cell-received="{ row }">
+                        <span class="whitespace-nowrap text-xs text-slate-500">{{ row.date_label }}</span>
+                    </template>
+                    <template #cell-status="{ row }">
+                        <Badge :tone="row.is_read ? 'slate' : 'amber'" size="xs">{{ row.is_read ? 'Read' : 'New' }}</Badge>
+                    </template>
+                    <template #cell-action="{ row }">
+                        <button
+                            type="button"
+                            @click="toggleMessage(row)"
+                            class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-primary-700 transition hover:bg-primary-50"
+                        >
+                            <CheckIcon v-if="!row.is_read" class="h-3.5 w-3.5" />
+                            <BellIcon v-else class="h-3.5 w-3.5" />
+                            {{ row.is_read ? 'Mark unread' : 'Mark read' }}
+                        </button>
+                    </template>
+                </DataTable>
             </div>
         </div>
     </DashboardLayout>
