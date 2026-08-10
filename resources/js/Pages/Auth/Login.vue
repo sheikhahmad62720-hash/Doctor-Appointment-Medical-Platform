@@ -71,15 +71,5 @@ const submit = () => {
                 <Link :href="route('register')" class="font-semibold text-primary-700 hover:text-primary-800">Create one</Link>
             </p>
         </form>
-
-        <div class="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50/60 p-4">
-            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Demo accounts</p>
-            <div class="mt-2 space-y-1 text-xs text-slate-500">
-                <p>Patient — <span class="font-mono font-semibold text-navy-900">patient@medicare.test</span></p>
-                <p>Doctor — <span class="font-mono font-semibold text-navy-900">ahmed@medicare.test</span></p>
-                <p>Admin — <span class="font-mono font-semibold text-navy-900">admin@medicare.test</span></p>
-                <p>Password — <span class="font-mono font-semibold text-navy-900">password</span></p>
-            </div>
-        </div>
     </GuestLayout>
 </template>

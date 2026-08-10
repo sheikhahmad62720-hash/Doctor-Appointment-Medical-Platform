@@ -1,7 +1,6 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
 import Brand from '@/Components/ui/Brand.vue';
-import DoctorIllustration from '@/Components/ui/DoctorIllustration.vue';
 import { ShieldCheckIcon, StarIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
 
 const page = usePage();
@@ -24,7 +23,7 @@ const page = usePage();
 
             <div class="relative max-w-md">
                 <div class="mx-auto -mb-4 w-64 opacity-90">
-                    <DoctorIllustration />
+                    <img src="DOCTOR_IMAGE_URL" alt="Dr. Awais Malik" class="h-auto w-full" />
                 </div>
                 <div class="relative z-10">
                     <h2 class="text-balance text-2xl font-extrabold leading-snug text-white">

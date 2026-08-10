@@ -5,7 +5,6 @@ import Button from '@/Components/ui/Button.vue';
 import Badge from '@/Components/ui/Badge.vue';
 import ServiceCard from '@/Components/ui/ServiceCard.vue';
 import SectionHeading from '@/Components/ui/SectionHeading.vue';
-import DoctorIllustration from '@/Components/ui/DoctorIllustration.vue';
 import {
     ShieldCheckIcon,
     StarIcon,
@@ -93,7 +92,7 @@ const goBook = () => router.visit(route('booking.create'));
                 <!-- Doctor illustration + floating cards -->
                 <div class="relative mx-auto w-full max-w-md lg:max-w-none">
                     <div class="relative">
-                        <DoctorIllustration />
+                        <img src="DOCTOR_IMAGE_URL" alt="Portrait of Dr. Awais Malik" class="h-auto w-full" />
 
                         <!-- Floating: experience badge -->
                         <div class="absolute left-0 top-8 animate-fade-in-up rounded-2xl border border-slate-100 bg-white/95 p-3.5 shadow-lifted backdrop-blur sm:left-4" style="animation-delay: 150ms">
@@ -193,7 +192,7 @@ const goBook = () => router.visit(route('booking.create'));
                     <div class="relative mx-auto w-full max-w-md lg:max-w-none">
                         <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-2">
                             <div class="overflow-hidden rounded-2xl bg-gradient-to-br from-primary-900/60 to-navy-900">
-                                <DoctorIllustration />
+                                <img src="DOCTOR_IMAGE_URL" alt="Portrait of Dr. Awais Malik" class="h-auto w-full" />
                             </div>
                             <div class="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow-lifted">
                                 <ShieldCheckIcon class="h-4 w-4 text-primary-600" />
