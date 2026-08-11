@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DoctorDashboardController;
 use App\Http\Controllers\PatientDashboardController;
+use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Middleware\EnsureUserRole;
@@ -26,19 +27,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PatientDashboardController::class, 'index'])->name('dashboard');
     Route::post('/appointments/{appointment}/cancel', [PatientDashboardController::class, 'cancel'])->name('appointments.cancel');
 
+    Route::get('/chat', [ChatController::class, 'patientIndex'])->name('chat.index');
+    Route::get('/chat/{conversation}', [ChatController::class, 'fetchMessages'])->name('chat.messages');
+    Route::post('/chat/{conversation}', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::post('/chat/{conversation}/attach', [ChatController::class, 'attachFile'])->name('chat.attach');
+    Route::post('/chat/{conversation}/read', [ChatController::class, 'markAsRead'])->name('chat.read');
+    Route::post('/chat/{conversation}/delivered', [ChatController::class, 'markDelivered'])->name('chat.delivered');
+    Route::post('/chat/{conversation}/messages/{message}/delete-me', [ChatController::class, 'deleteForMe'])->name('chat.delete-me');
+    Route::post('/chat/{conversation}/messages/{message}/delete-everyone', [ChatController::class, 'deleteForEveryone'])->name('chat.delete-everyone');
+    Route::get('/chat/{conversation}/peer-status', [PresenceController::class, 'peerStatus'])->name('chat.peer-status');
+
+    Route::post('/presence/heartbeat', [PresenceController::class, 'heartbeat'])->name('presence.heartbeat');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', EnsureUserRole::class.':doctor'])->group(function () {
-    Route::get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
-    Route::post('/appointments/{appointment}/status', [DoctorDashboardController::class, 'updateStatus'])->name('appointments.status');
-});
-
 Route::middleware(['auth', EnsureUserRole::class.':admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/messages/{contactMessage}/toggle', [ContactController::class, 'toggleRead'])->name('admin.messages.toggle');
+    Route::get('/admin/chat', [ChatController::class, 'adminIndex'])->name('admin.chat');
 });
 
 require __DIR__.'/auth.php';

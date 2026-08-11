@@ -5,7 +5,7 @@ import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
-import { HomeIcon, UserCircleIcon, PlusIcon } from '@heroicons/vue/24/outline';
+import { HomeIcon, UserCircleIcon, PlusIcon, ChatBubbleLeftRightIcon } from '@heroicons/vue/24/outline';
 
 defineProps({
     mustVerifyEmail: { type: Boolean },
@@ -15,11 +15,11 @@ defineProps({
 const page = usePage();
 const user = page.props.auth?.user;
 
-const homeRoute = user?.role === 'doctor' ? 'doctor.dashboard' : user?.role === 'admin' ? 'admin.dashboard' : 'dashboard';
+const homeRoute = user?.role === 'admin' ? 'admin.dashboard' : 'dashboard';
 
 const navItems = [
     { label: 'Dashboard', route: homeRoute, icon: HomeIcon },
-    { label: user?.role === 'doctor' ? 'Book a Test Slot' : 'Book Appointment', route: 'booking.create', icon: PlusIcon },
+    { label: user?.role === 'admin' ? 'Messages' : 'Book Appointment', route: user?.role === 'admin' ? 'admin.chat' : 'booking.create', icon: user?.role === 'admin' ? ChatBubbleLeftRightIcon : PlusIcon },
     { label: 'My Profile', route: 'profile.edit', icon: UserCircleIcon },
 ];
 </script>

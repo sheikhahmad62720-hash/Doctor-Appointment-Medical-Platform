@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
 #[Fillable([
     'name',
     'email',
@@ -26,6 +25,7 @@ use Illuminate\Notifications\Notifiable;
     'location',
     'clinics',
     'available',
+    'last_seen_at',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -33,19 +33,20 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    public const ROLE_PATIENT = 'patient';
-    public const ROLE_DOCTOR = 'doctor';
-    public const ROLE_ADMIN = 'admin';
+        public const ROLE_PATIENT = 'patient';
+        public const ROLE_DOCTOR = 'doctor';
+        public const ROLE_ADMIN = 'admin';
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'available' => 'boolean',
-            'clinics' => 'array',
-        ];
-    }
+        protected function casts(): array
+        {
+            return [
+                'email_verified_at' => 'datetime',
+                'last_seen_at' => 'datetime',
+                'password' => 'hashed',
+                'available' => 'boolean',
+                'clinics' => 'array',
+            ];
+        }
 
     public function isDoctor(): bool
     {
@@ -75,5 +76,15 @@ class User extends Authenticatable
     public function reviewsReceived(): HasMany
     {
         return $this->hasMany(Review::class, 'doctor_id');
+    }
+
+    public function conversationsAsPatient(): HasMany
+    {
+        return $this->hasMany(Conversation::class, 'patient_id');
+    }
+
+    public function conversationsAsAdmin(): HasMany
+    {
+        return $this->hasMany(Conversation::class, 'admin_id');
     }
 }

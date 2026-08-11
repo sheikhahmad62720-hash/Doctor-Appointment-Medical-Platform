@@ -1,9 +1,10 @@
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import Brand from '@/Components/ui/Brand.vue';
+import site from '@/config/site.js';
 import { ShieldCheckIcon, StarIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
 
-const page = usePage();
+const doctor = site.doctor;
 </script>
 
 <template>
@@ -21,22 +22,22 @@ const page = usePage();
                 <Link :href="route('home')"><Brand tone="dark" /></Link>
             </div>
 
-            <div class="relative max-w-md">
-                <div class="mx-auto -mb-4 w-64 opacity-90">
-                    <img src="/assets/awais.webp" alt="Dr. Awais Malik" class="aspect-[4/5] w-full rounded-[10px] object-cover object-top" />
+            <div class="relative flex flex-col items-center py-4 text-center">
+                <div class="w-52 shrink-0 overflow-hidden rounded-[10px] shadow-2xl ring-1 ring-white/10 xl:w-56">
+                    <img src="/assets/awais.webp" :alt="doctor?.name" class="aspect-[4/5] w-full object-cover object-top" />
                 </div>
-                <div class="relative z-10">
-                    <h2 class="text-balance text-2xl font-extrabold leading-snug text-white">
-                        "Healthcare that puts <span class="text-primary-400">you</span> first."
-                    </h2>
-                    <div class="mt-6 flex items-center gap-4">
-                        <span class="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur">
-                            <StarIcon class="h-4 w-4 text-amber-400" /> 4.9/5 rating
-                        </span>
-                        <span class="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur">
-                            <ShieldCheckIcon class="h-4 w-4 text-primary-400" /> Secure &amp; private
-                        </span>
-                    </div>
+                <h2 class="mt-8 text-balance text-2xl font-extrabold leading-snug text-white">
+                    "Advanced surgical care with a calm, <span class="text-primary-400">patient-first</span> approach."
+                </h2>
+                <p class="mt-5 text-sm font-semibold text-white">{{ doctor?.name }}</p>
+                <p class="text-xs text-white/60">{{ doctor?.specialization }}</p>
+                <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                    <span class="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur">
+                        <StarIcon class="h-4 w-4 text-amber-400" /> {{ doctor?.rating ?? '4.9' }}/5 rating
+                    </span>
+                    <span class="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur">
+                        <ShieldCheckIcon class="h-4 w-4 text-primary-400" /> {{ doctor?.experience_years ?? '10' }}+ yrs experience
+                    </span>
                 </div>
             </div>
 

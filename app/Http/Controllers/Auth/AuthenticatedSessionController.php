@@ -34,7 +34,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $default = match ($request->user()->role) {
-            'doctor' => route('doctor.dashboard', absolute: false),
             'admin' => route('admin.dashboard', absolute: false),
             default => route('dashboard', absolute: false),
         };

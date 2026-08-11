@@ -1,58 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><img src="https://img.shields.io/badge/Laravel-13-red?style=for-the-badge&logo=laravel" alt="Laravel 13"> <img src="https://img.shields.io/badge/Inertia-2-blue?style=for-the-badge" alt="Inertia 2"> <img src="https://img.shields.io/badge/Vue-3-42b883?style=for-the-badge&logo=vue.js" alt="Vue 3"> <img src="https://img.shields.io/badge/Tailwind-3-38bdf8?style=for-the-badge&logo=tailwindcss" alt="Tailwind 3"></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# MediCare — Doctor Appointment Booking System
 
-## About Laravel
+A complete clinic appointment platform for **Prof. Dr. Awais Malik** (Bariatric, Laparoscopic & General Surgeon, Lahore). Patients can browse services, book consultations, and manage appointments, while the doctor and admin get dedicated dashboards.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Public website
+- **Home** — hero, doctor profile, services preview, patient reviews, CTA.
+- **About** — doctor bio, qualifications, stats and values.
+- **Services** — all services with procedures, pricing and details.
+- **Service detail pages** — per-service overview, procedures, clinic locations and booking card.
+- **Contact** — clinic info (FMH Shadman & Mid City Jail Road) and a working contact form.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Patients
+- Register / login.
+- Multi-step booking flow: **Service → Consultation type → Date & time (live availability) → Patient details → Payment**.
+- Appointment confirmation page with clinic details.
+- Personal dashboard to view and cancel appointments.
 
-## Learning Laravel
+### Doctor
+- Doctor dashboard with today's appointments, pending requests and slot availability.
+- Update appointment status (confirm / complete / cancel).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Admin
+- Admin dashboard with stats: appointments, patients, revenue (PKR), monthly revenue, pending payments.
+- Last-7-days appointment trend + status breakdown.
+- Recent appointments, patients and reviews.
+- **Contact messages** inbox with **read / unread** toggle.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Tech Stack
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Layer      | Tech                                    |
+| ---------- | --------------------------------------- |
+| Backend    | Laravel 13 (PHP 8.4)                    |
+| Frontend   | Inertia 2 · Vue 3 · Tailwind CSS 3      |
+| Build      | Vite 8 · @heroicons/vue                 |
+| Database   | SQLite (out of the box)                 |
 
-## Agentic Development
+## Demo Accounts
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+| Role   | Email                | Password     |
+| ------ | -------------------- | ------------ |
+| Admin  | `awais@gmail.com`    | `awais@720`  |
+| Doctor | `ahmed@medicare.test`| `password`   |
+| Patient| `patient@medicare.test` | `password` |
+
+## Setup
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+npm install
+cp .env.example .env        # or copy manually on Windows
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Configure the database in `.env` (defaults to SQLite — the file already exists at `database/database.sqlite`).
 
-## Contributing
+```bash
+php artisan migrate:fresh --seed
+npm run build               # production assets
+php artisan serve           # http://127.0.0.1:8000
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+For development with hot reload instead of `npm run build`:
 
-## Code of Conduct
+```bash
+npm run dev
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Editing Site Content
 
-## Security Vulnerabilities
+All public website content lives in a single file:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+> **`resources/js/config/site.js`**
+
+It holds the doctor profile, clinics, services (with procedures & PKR pricing) and reviews.
+
+- Edit the file → run `npm run build` (or use `npm run dev` for hot reload).
+- Services/pricing are also seeded to the database for booking & dashboards — after changing those, run `php artisan db:seed`.
+
+The seeder (`database/seeders/DatabaseSeeder.php`) only creates the login users and seeds services from `site.js` — no fake appointments or messages.
+
+## Data Model
+
+- **users** — patients, doctor, admin. Doctor profile includes `clinics` (JSON) and `qualifications`.
+- **services** — surgical services with `procedures` (JSON), price, duration and consultation type.
+- **appointments** — bookings linked to patient, doctor and service, with status and payment status.
+- **reviews** — patient feedback linked to completed appointments.
+- **contact_messages** — messages from the contact form, with a `is_read` flag for the admin inbox.
+
+## Key Routes
+
+| Method | URI                     | Access            |
+| ------ | ----------------------- | ----------------- |
+| GET    | `/`                     | Public            |
+| GET    | `/services`             | Public            |
+| GET    | `/services/{slug}`      | Public            |
+| POST   | `/contact`              | Public            |
+| GET    | `/book`                 | Auth              |
+| POST   | `/book`                 | Auth              |
+| GET    | `/dashboard`            | Patient           |
+| GET    | `/doctor/dashboard`     | Doctor            |
+| GET    | `/admin/dashboard`      | Admin             |
+| POST   | `/admin/messages/{id}/toggle` | Admin        |
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
