@@ -68,7 +68,7 @@ const navHref = (name) => {
                 </div>
                 <span class="inline-flex items-center gap-1.5 font-medium text-primary-300">
                     <ShieldCheckIcon class="h-3.5 w-3.5" />
-                    Professor of Surgery · 25+ years experience
+                    Professor of Surgery · 10+ years experience
                 </span>
             </div>
         </div>
@@ -228,7 +228,7 @@ const navHref = (name) => {
                     <div class="col-span-2 md:col-span-1">
                         <Brand />
                         <p class="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
-                            Advanced bariatric, laparoscopic and general surgery — delivered with care in Lahore for over 25 years.
+                            Advanced bariatric, laparoscopic and general surgery — delivered with care in Lahore for over 10 years.
                         </p>
                         <div class="mt-5 flex items-center gap-2">
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-100">
