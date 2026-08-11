@@ -7,7 +7,7 @@ export default {
     "doctor": {
         "name": "Prof. Dr. Awais Malik",
         "specialization": "Bariatric, Laparoscopic & General Surgeon",
-        "bio": "Prof. Dr. Awais Malik is a Professor of Surgery at Fatima Memorial Hospital, Lahore, with more than 25 years of surgical experience. He specialises in bariatric (weight loss) surgery, advanced laparoscopic procedures and complex general surgery — combining technical precision with calm, patient-first care.",
+        "bio": "Prof. Dr. Awais Malik is a Professor of Surgery at Fatima Memorial Hospital, Lahore, with more than 10 years of surgical experience. He specialises in bariatric (weight loss) surgery, advanced laparoscopic procedures and complex general surgery — combining technical precision with calm, patient-first care.",
         "qualifications": "MBBS\nFCPS (General Surgery)",
         "education": "Fatima Memorial Hospital, Lahore",
         "experience_years": 10,

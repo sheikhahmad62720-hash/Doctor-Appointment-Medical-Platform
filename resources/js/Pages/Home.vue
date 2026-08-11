@@ -280,18 +280,29 @@ const goBook = () => router.visit(route('booking.create'));
                 />
 
                 <div class="mt-12 grid gap-6 md:grid-cols-3">
-                    <figure v-for="review in reviews" :key="review.id" class="card flex h-full flex-col p-6">
-                        <div class="flex items-center gap-0.5">
-                            <StarIcon v-for="i in 5" :key="i" class="h-4 w-4" :class="i <= review.rating ? 'text-amber-400' : 'text-slate-200'" />
+                    <figure v-for="review in reviews" :key="review.id" class="card card-hover group relative flex h-full flex-col overflow-hidden p-6">
+                        <span class="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-primary-100/60 blur-2xl transition-colors duration-300 group-hover:bg-primary-200/70" />
+                        <span class="pointer-events-none absolute right-5 top-3 select-none font-serif text-6xl leading-none text-primary-100/80 transition-colors duration-300 group-hover:text-primary-200">”</span>
+
+                        <div class="relative flex items-center justify-between">
+                            <div class="flex items-center gap-0.5">
+                                <StarIcon v-for="i in 5" :key="i" class="h-4 w-4 transition-transform duration-300 group-hover:scale-110" :class="i <= review.rating ? 'text-amber-400' : 'text-slate-200'" />
+                            </div>
+                            <span class="rounded-full bg-primary-50 px-2 py-0.5 text-[11px] font-bold text-primary-700 ring-1 ring-primary-100">{{ review.rating }}.0</span>
                         </div>
-                        <blockquote class="mt-4 flex-1 text-sm leading-relaxed text-slate-600">“{{ review.comment }}”</blockquote>
-                        <figcaption class="mt-5 flex items-center gap-3 border-t border-slate-100 pt-4">
-                            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-primary-50 text-xs font-bold text-primary-700 ring-1 ring-primary-100">
+
+                        <blockquote class="relative mt-4 flex-1 text-sm leading-relaxed text-slate-600">“{{ review.comment }}”</blockquote>
+
+                        <figcaption class="relative mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
+                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 text-sm font-bold text-white shadow-soft ring-1 ring-primary-200">
                                 {{ review.patient.split(' ').slice(0, 2).map((w) => w[0]).join('') }}
                             </span>
-                            <div>
-                                <p class="text-sm font-semibold text-navy-900">{{ review.patient }}</p>
-                                <p class="text-xs text-slate-400">Verified patient · {{ review.date }}</p>
+                            <div class="min-w-0">
+                                <p class="truncate text-sm font-bold text-navy-900">{{ review.patient }}</p>
+                                <p class="mt-0.5 flex items-center gap-1 text-xs text-slate-400">
+                                    <CheckCircleIcon class="h-3.5 w-3.5 text-emerald-500" />
+                                    Verified patient · {{ review.date }}
+                                </p>
                             </div>
                         </figcaption>
                     </figure>
