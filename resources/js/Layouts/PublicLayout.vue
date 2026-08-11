@@ -104,14 +104,7 @@ const navHref = (name) => {
                     <div class="hidden items-center gap-3 lg:flex">
                         <template v-if="user()">
                             <Link
-                                v-if="user().role === 'doctor'"
-                                :href="route('doctor.dashboard')"
-                                class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:text-navy-900"
-                            >
-                                My Dashboard
-                            </Link>
-                            <Link
-                                v-else-if="user().role === 'admin'"
+                                v-if="user().role === 'admin'"
                                 :href="route('admin.dashboard')"
                                 class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:text-navy-900"
                             >

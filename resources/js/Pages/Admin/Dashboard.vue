@@ -1,10 +1,13 @@
 <script setup>
+import { computed, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import StatCard from '@/Components/ui/StatCard.vue';
 import Badge from '@/Components/ui/Badge.vue';
 import Avatar from '@/Components/ui/Avatar.vue';
 import DataTable from '@/Components/ui/DataTable.vue';
+import Modal from '@/Components/ui/Modal.vue';
+import Button from '@/Components/ui/Button.vue';
 import {
     CalendarDaysIcon,
     UsersIcon,
@@ -15,8 +18,10 @@ import {
     UserCircleIcon,
     StarIcon,
     EnvelopeIcon,
+    EnvelopeOpenIcon,
     CheckIcon,
     BellIcon,
+    EyeIcon,
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
@@ -62,6 +67,22 @@ const toggleMessage = (message) => {
         preserveScroll: true,
         preserveState: true,
     });
+};
+
+const activeMessageId = ref(null);
+
+const activeMessage = computed(() => props.recentMessages.find((m) => m.id === activeMessageId.value) ?? null);
+
+const openMessage = (message) => {
+    activeMessageId.value = message.id;
+    if (!message.is_read) {
+        message.is_read = true;
+        toggleMessage(message);
+    }
+};
+
+const closeMessage = () => {
+    activeMessageId.value = null;
 };
 </script>
 
@@ -247,16 +268,65 @@ const toggleMessage = (message) => {
                     <template #cell-action="{ row }">
                         <button
                             type="button"
-                            @click="toggleMessage(row)"
+                            @click="openMessage(row)"
                             class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-primary-700 transition hover:bg-primary-50"
                         >
-                            <CheckIcon v-if="!row.is_read" class="h-3.5 w-3.5" />
-                            <BellIcon v-else class="h-3.5 w-3.5" />
-                            {{ row.is_read ? 'Mark unread' : 'Mark read' }}
+                            <EnvelopeOpenIcon v-if="!row.is_read" class="h-3.5 w-3.5" />
+                            <EyeIcon v-else class="h-3.5 w-3.5" />
+                            {{ row.is_read ? 'View' : 'Read' }}
                         </button>
                     </template>
                 </DataTable>
             </div>
         </div>
+
+        <!-- Read message modal -->
+        <Modal :show="!!activeMessage" title="Message details" max-width="lg" @close="closeMessage">
+            <template v-if="activeMessage">
+                <div class="flex items-start gap-4">
+                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-50 text-sm font-bold text-primary-700 ring-1 ring-primary-100">
+                        {{ activeMessage.initials }}
+                    </span>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h4 class="text-sm font-bold text-navy-950">{{ activeMessage.name }}</h4>
+                            <Badge :tone="activeMessage.is_read ? 'slate' : 'amber'" size="xs">{{ activeMessage.is_read ? 'Read' : 'New' }}</Badge>
+                        </div>
+                        <a :href="'mailto:' + activeMessage.email" class="text-sm text-primary-700 hover:text-primary-800">{{ activeMessage.email }}</a>
+                        <p class="mt-0.5 text-xs text-slate-400">Received {{ activeMessage.date_label }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-5 rounded-xl border border-slate-100 bg-slate-50/60 p-4">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Subject</p>
+                    <p class="mt-1 text-sm font-semibold text-navy-900">{{ activeMessage.subject }}</p>
+                </div>
+
+                <div class="mt-4">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Message</p>
+                    <p class="mt-2 whitespace-pre-wrap leading-relaxed text-slate-600">{{ activeMessage.message }}</p>
+                </div>
+            </template>
+
+            <template #footer>
+                <div v-if="activeMessage" class="flex items-center justify-between gap-3">
+                    <button
+                        type="button"
+                        @click="toggleMessage(activeMessage)"
+                        class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100"
+                    >
+                        <CheckIcon v-if="activeMessage.is_read" class="h-4 w-4" />
+                        <BellIcon v-else class="h-4 w-4" />
+                        {{ activeMessage.is_read ? 'Mark as unread' : 'Mark as read' }}
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <Button size="sm" variant="outline" @click="closeMessage">Close</Button>
+                        <a :href="'mailto:' + activeMessage.email">
+                            <Button size="sm">Reply</Button>
+                        </a>
+                    </div>
+                </div>
+            </template>
+        </Modal>
     </DashboardLayout>
 </template>

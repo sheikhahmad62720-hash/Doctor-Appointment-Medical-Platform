@@ -15,11 +15,11 @@ defineProps({
 const page = usePage();
 const user = page.props.auth?.user;
 
-const homeRoute = user?.role === 'doctor' ? 'doctor.dashboard' : user?.role === 'admin' ? 'admin.dashboard' : 'dashboard';
+const homeRoute = user?.role === 'admin' ? 'admin.dashboard' : 'dashboard';
 
 const navItems = [
     { label: 'Dashboard', route: homeRoute, icon: HomeIcon },
-    { label: user?.role === 'doctor' ? 'Book a Test Slot' : 'Book Appointment', route: 'booking.create', icon: PlusIcon },
+    { label: 'Book Appointment', route: 'booking.create', icon: PlusIcon },
     { label: 'My Profile', route: 'profile.edit', icon: UserCircleIcon },
 ];
 </script>
