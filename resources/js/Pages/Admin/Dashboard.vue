@@ -22,6 +22,7 @@ import {
     CheckIcon,
     BellIcon,
     EyeIcon,
+    ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
@@ -37,6 +38,7 @@ const props = defineProps({
 
 const navItems = [
     { label: 'Dashboard', route: 'admin.dashboard', icon: HomeIcon },
+    { label: 'Messages', route: 'admin.chat', icon: ChatBubbleLeftRightIcon },
     { label: 'My Profile', route: 'profile.edit', icon: UserCircleIcon },
 ];
 

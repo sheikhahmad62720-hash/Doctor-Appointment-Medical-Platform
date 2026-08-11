@@ -21,6 +21,8 @@
     },
     "dependencies": {
         "@heroicons/vue": "^2.2.0",
-        "axios": "^1.19.0"
+        "axios": "^1.19.0",
+        "laravel-echo": "^2.4.0",
+        "pusher-js": "^8.6.0"
     }
 }
