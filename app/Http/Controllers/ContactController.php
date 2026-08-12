@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewContactMessage;
 use App\Models\ContactMessage;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -16,7 +19,13 @@ class ContactController extends Controller
             'message' => ['required', 'string', 'min:10', 'max:5000'],
         ]);
 
-        ContactMessage::create($data);
+        $message = ContactMessage::create($data);
+
+        $adminEmail = env('ADMIN_NOTIFY_EMAIL', User::where('role', 'admin')->value('email'));
+
+        if ($adminEmail) {
+            Mail::to($adminEmail)->send(new NewContactMessage($data));
+        }
 
         return redirect()->back()->with('status', 'Your message has been sent. We will reply within one business day.');
     }
