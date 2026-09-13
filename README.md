@@ -143,31 +143,6 @@ The seeder (`database/seeders/DatabaseSeeder.php`) only creates the login users 
 - **Channel auth** — `routes/channels.php` guards each conversation (`chat.{conversation}`) by membership and returns the online member payload for `presence-online`.
 - **Message payloads** — serialized once in `app/Support/ChatMessageSerializer.php` (reply snippet, file URL, ticks, deleted flag, timestamps).
 
-## Key Routes
-
-| Method | URI                     | Access            |
-| ------ | ----------------------- | ----------------- |
-| GET    | `/`                     | Public            |
-| GET    | `/services`             | Public            |
-| GET    | `/services/{slug}`      | Public            |
-| POST   | `/contact`              | Public            |
-| GET    | `/book`                 | Auth              |
-| POST   | `/book`                 | Auth              |
-| GET    | `/dashboard`            | Patient           |
-| GET    | `/doctor/dashboard`     | Doctor            |
-| GET    | `/admin/dashboard`      | Admin             |
-| POST   | `/admin/messages/{id}/toggle` | Admin        |
-| GET    | `/chat`                 | Patient           |
-| GET    | `/admin/chat`           | Admin             |
-| GET    | `/chat/{conversation}`  | Member (messages) |
-| POST   | `/chat/{conversation}`  | Member (send)     |
-| POST   | `/chat/{conversation}/attach` | Member      |
-| POST   | `/chat/{conversation}/read` · `/delivered` | Member |
-| POST   | `/chat/{conversation}/messages/{message}/delete-me` | Sender |
-| POST   | `/chat/{conversation}/messages/{message}/delete-everyone` | Sender |
-| GET    | `/chat/{conversation}/peer-status` | Member  |
-| POST   | `/presence/heartbeat`   | Auth              |
-
 ## License
 
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
